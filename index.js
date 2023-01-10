@@ -40,8 +40,12 @@ function promptManager() {
 
 function promptEmployee() {
    return inquirer.prompt(employeeQuest).then(function (answers) {
-      employeeData.push(answers)
-      console.log(answers);
+      if (answers.openingPrompt != 'Exit') {
+         employeeData.push(answers)
+         console.log('Generating Team Member');
+         console.log(answers);
+         promptEmployee();
+      }
    })
 }
 
@@ -56,10 +60,7 @@ function init() {
       .then(data => {
          console.log('Generating Team Manager...');
          // writeToFile('index.html', generateRoster({ ...data }));
-         promptEmployee()
-         .then(data => {
-            console.log('Generating Team Member')
-         })
+         promptEmployee();
       })
       .catch(function (error) {
          console.error(error);
@@ -79,22 +80,26 @@ const employeeQuest = [
    {
       name: 'name',
       message: 'What is employee name?',
-      type: 'input'
+      type: 'input',
+      when: (answers) => answers.openingPrompt != 'Exit'
    },
    { 
       name: 'employeeId',
       message: 'Enter employee ID here.',
-      type: 'input'
+      type: 'input',
+      when: (answers) => answers.openingPrompt != 'Exit'
    },
    {
       name: 'email',
       message: 'Enter employee email',
-      type: 'input'
+      type: 'input',
+      when: (answers) => answers.openingPrompt != 'Exit'
    },
    {
       name: 'github',
       message: 'Enter employee github username.',
-      type: 'input'
+      type: 'input',
+      when: (answers) => answers.openingPrompt != 'Exit'
    }
 ];
 
