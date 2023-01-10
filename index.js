@@ -1,69 +1,47 @@
+/* 1) X Prompts the core manager information
+   2) Prompts the new employee and type of employee if desired or be done
+   3)if they want to make a new employee prompts employee indormation questions
+   4) After new employee information is entered then it will prompt you to do step 2 again
+   5) else completes input of commandline and generates html page
+   */
+
+
+const {employeeQuest, managerQuest} = require('./lib/prompts');
+const {Employee, Manager, TeamMember} = require('./lib/models'); 
 const fs = require('fs');
-const { type } = require("os");
-const { choices } = require("yargs");
+const inquirer = require('inquirer');
+const employeeData = []
 
-class employee {
-   constructor( jobTitle, name, employeeId, email, githubUser){
-   this.jobTitle = jobTitle;
-   this.name = name;
-   this.employeeId = employeeId;
-   this.email = email;
-   this.githubUser = githubUser;
-   }
-}
-
-displayInfo() {
-   console.log()
-}
-
-const employee = new employee(`Engineer, Joey, 1, joey@gmail.com, Imjoey`)
-
-
-const employeeQuest = [
-   {
-      name: 'openingPrompt'
-      message: 'Would you like to add a Team Memeber to your company Roster?',
-      type: 'list',
-      choices:[Yes, No]
-   }
-   {
-      name: 'name',
-      message: 'What is employee name?',
-      type: 'input'
-   },
-   { 
-      name: 'employeeId',
-      message: 'Enter employee ID here.',
-      type: 'input'
-   },
-   {
-      name: 'email',
-      message: 'Enter employee email',
-      type: 'input'
-   }
-   {
-      name: 'github',
-      message: 'Enter employee github username.',
-      type: 'input'
-   }
-];
-
-function writeToFile(writeFile, emplyeeInfo) {
-   fs.writeFile(writeFile, emplyeeInfo, (error)=> {
-      error? console.error(error): console.log('New team member is created.')  
+console.log(employeeQuest);
+function promptManager() {
+   return inquirer.prompt(managerQuest).then(function (answers) {
+      employeeData.push(answers)
+      console.log(answers);
    })
 }
 
-function init() {
-   
+inquirer.prompt(employeeQuest)
+
+function writeToFile(writeFile, employeeInfo) {
+   fs.writeFile(writeFile, emplyeeInfo, (error) => {
+      error ? console.error(error) : console.log('New team member is created.')
+   })
 }
 
-// function init() {
-//    inquirer.prompt(questions).then(data => {
-//      console.log('Generating ReadMe...');
-//      writeToFile('README.md', generateMarkdown({ ...data }));
-//    });
-//  };
- 
-//  init();
- 
+
+
+function init() {
+   promptManager()
+      .then(data => {
+         console.log('Generating HTML...');
+         writeToFile('index.html', generateMarkdown({ ...data }));
+      })
+      .catch(function (error) {
+         console.error(error);
+
+      });
+
+};
+
+//  <a href = mailto
+// init();
